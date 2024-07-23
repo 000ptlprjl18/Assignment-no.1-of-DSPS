@@ -1,0 +1,41 @@
+#include<iostream>
+using namespace std;
+
+int main()
+{
+    int A[10], i, j, size, target, flag = 0;
+
+    cout << "\nEnter the size of array :\t";
+    cin >> size;
+
+    if (size > 10) {
+        cout << "Size exceeds the limit of 10.";
+    } else {
+        for (i = 0; i < size; i++) {
+            cout << "Enter the array element:\t";
+            cin >> A[i];
+        }
+
+        cout << "Array elements are:\t";
+        for (i = 0; i < size; i++) {
+            cout << A[i] << " ";
+        }
+
+        cout << "\nEnter target:\t";
+        cin >> target;
+
+        for (j = 0; j < size; j++) {
+            if (target == A[j]) {
+                cout << "\nTarget found at index " << j;
+                flag = 1;
+                break; 
+            }
+        }
+
+        if (flag == 0) {
+            cout << "\nTarget not found in given array.";
+        }
+    }
+
+    return 0;
+}

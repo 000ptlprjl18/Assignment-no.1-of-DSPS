@@ -1,0 +1,32 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+bool isPalindrome(const string& input) {
+    string cleaned;
+    for (int i = 0; i < input.length(); i++) {
+        char c = input[i];
+        if (isalnum(c)) {
+            cleaned.push_back(tolower(c));
+        }
+    }
+    int n = cleaned.length();
+    for (int i = 0; i < n / 2; i++) {
+        if (cleaned[i] != cleaned[n - i - 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+    string input;
+    cout << "Enter a string: ";
+    getline(cin, input);
+    if (isPalindrome(input)) {
+        cout << "'" << input << "' is a palindrome." << endl;
+    } else {
+        cout << "'" << input << "' is not a palindrome." << endl;
+    }
+    return 0;
+}

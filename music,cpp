@@ -1,0 +1,165 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Track {
+public:
+    string title, artist, album, genre;
+    int duration, releaseYear;
+    Track* next;
+
+    Track(string t, string ar, string al, string g, int d, int y)
+        : title(t), artist(ar), album(al), genre(g), duration(d), releaseYear(y), next(nullptr) {}
+};
+
+class MusicLibrary {
+    Track* head = nullptr;
+
+public:
+    void addTrack() {
+        string t, ar, al, g;
+        int d, y;
+        cout << "Enter Track Title: ";
+        cin>>t;
+        cout << "Enter Artist Name: ";
+        cin>>ar;
+        cout << "Enter Album Name: ";
+        cin>>al;
+        cout << "Enter Genre: ";
+        cin>>g;
+        cout << "Enter Duration (in seconds): ";
+        cin >> d;
+        cout << "Enter Release Year: ";
+        cin >> y;
+
+        Track* newTrack = new Track(t, ar, al, g, d, y);
+        if (!head) {
+            head = newTrack;
+            newTrack->next = head;
+        } else {
+            Track* temp = head;
+            while (temp->next != head) temp = temp->next;
+            temp->next = newTrack;
+            newTrack->next = head;
+        }
+    }
+
+    void displayTracks() {
+        if (!head) {
+            cout << "No tracks in the library.\n";
+            return;
+        }
+        Track* temp = head;
+        do {
+            cout << "Title: " << temp->title << ", Artist: " << temp->artist
+                 << ", Album: " << temp->album << ", Genre: " << temp->genre
+                 << ", Duration: " << temp->duration << " seconds, Year: " << temp->releaseYear << endl;
+            temp = temp->next;
+        } while (temp != head);
+    }
+
+    void updateTrack() {
+        string oldTitle, t, ar, al, g;
+        int d, y;
+        cout << "Enter the Title of the Track to Update: ";
+        cin.ignore();
+        getline(cin, oldTitle);
+
+        Track* temp = head;
+        if (!temp) {
+            cout << "Track not found.\n";
+            return;
+        }
+        do {
+            if (temp->title == oldTitle) {
+                cout << "Enter New Track Title: ";
+                getline(cin, t);
+                cout << "Enter New Artist Name: ";
+                getline(cin, ar);
+                cout << "Enter New Album Name: ";
+                getline(cin, al);
+                cout << "Enter New Genre: ";
+                getline(cin, g);
+                cout << "Enter New Duration (in seconds): ";
+                cin >> d;
+                cout << "Enter New Release Year: ";
+                cin >> y;
+
+                temp->title = t;
+                temp->artist = ar;
+                temp->album = al;
+                temp->genre = g;
+                temp->duration = d;
+                temp->releaseYear = y;
+                return;
+            }
+            temp = temp->next;
+        } while (temp != head);
+
+        cout << "Track not found.\n";
+    }
+
+    void removeTrack() {
+        string title;
+        cout << "Enter the Title of the Track to Remove: ";
+        cin.ignore();
+        getline(cin, title);
+
+        if (!head) {
+            cout << "No tracks in the library.\n";
+            return;
+        }
+
+        if (head->title == title && head->next == head) {
+            delete head;
+            head = nullptr;
+            cout << "Track removed successfully.\n";
+            return;
+        }
+
+        Track* temp = head;
+        Track* prev = nullptr;
+        do {
+            if (temp->title == title) {
+                if (!prev) {
+                    Track* last = head;
+                    while (last->next != head) last = last->next;
+                    last->next = head->next;
+                    delete head;
+                    head = last->next;
+                } else {
+                    prev->next = temp->next;
+                    delete temp;
+                }
+                cout << "Track removed successfully.\n";
+                return;
+            }
+            prev = temp;
+            temp = temp->next;
+        } while (temp != head);
+
+        cout << "Track not found.\n";
+    }
+};
+
+int main() {
+    MusicLibrary library;
+    int choice;
+
+    do {
+        cout << "\n1. Add Track\n2. Display Tracks\n3. Update Track\n4. Remove Track\n5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: library.addTrack(); break;
+            case 2: library.displayTracks(); break;
+            case 3: library.updateTrack(); break;
+            case 4: library.removeTrack(); break;
+            case 5: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
